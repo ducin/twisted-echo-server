@@ -18,4 +18,4 @@ class MainTest (unittest.TestCase):
         time.sleep(1)
         os.killpg(sp.pid, signal.SIGTERM)
         self.assertEqual(sp.stdout.readlines(), [])
-        self.assertEqual(cp.stdout.readlines(), ['hello\n'])
+        self.assertEqual(cp.stdout.readlines(), ['> hello\n', '< hello\n'])
