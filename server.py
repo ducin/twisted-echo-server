@@ -4,7 +4,8 @@ from config import service
 class Echo(protocol.Protocol):
     def dataReceived(self, data):
         self.transport.write(data)
-        self.transport.loseConnection()
+        if data == 'exit':
+            self.transport.loseConnection()
 
 class EchoFactory(protocol.Factory):
     def buildProtocol(self, addr):
