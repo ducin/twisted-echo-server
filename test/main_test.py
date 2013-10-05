@@ -1,8 +1,7 @@
 import unittest
-import subprocess
+import multiprocessing
 import time
-import os, signal
-# terminating subprocess: http://stackoverflow.com/questions/4789837/how-to-terminate-a-python-subprocess-launched-with-shell-true
+import server, client
 
 class MainTest (unittest.TestCase):
     """
@@ -12,10 +11,16 @@ class MainTest (unittest.TestCase):
     The testing is a little bit brutal.
     """
     def test_run(self):
-        sp = subprocess.Popen('python server.py', stdout=subprocess.PIPE, shell=True, preexec_fn=os.setsid)
+        sp = multiprocessing.Process(target=server.run, args=())
+        cp = multiprocessing.Process(target=client.run, args=())
+        sp.start()
         time.sleep(1)
-        cp = subprocess.Popen('python client.py', stdout=subprocess.PIPE, shell=True, preexec_fn=os.setsid)
+        cp.start()
         time.sleep(1)
-        os.killpg(sp.pid, signal.SIGTERM)
-        self.assertEqual(sp.stdout.readlines(), [])
-        self.assertEqual(cp.stdout.readlines(), ['> hello\n', '< hello\n', '> from\n', '< from\n', '> twisted\n', '< twisted\n', '> client\n', '< client\n', '> exit\n', '< exit\n'])
+        sp.terminate()
+
+        f = open('client.log')
+        output = [line.rstrip() for line in f.readlines()]
+        f.close()
+        print output
+        self.assertEqual(output, ['OUT:hello', 'IN:hello', 'OUT:from', 'IN:from', 'OUT:twisted', 'IN:twisted', 'OUT:client', 'IN:client', 'OUT:exit', 'IN:exit'])

@@ -1,0 +1,10 @@
+OUT:hello
+IN:hello
+OUT:from
+IN:from
+OUT:twisted
+IN:twisted
+OUT:client
+IN:client
+OUT:exit
+IN:exit

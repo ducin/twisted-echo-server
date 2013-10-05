@@ -5,4 +5,4 @@ python:
 install:
   - pip install -r requirements.txt --use-mirrors
 before_script: export PYTHONPATH="$PYTHONPATH:`pwd`"
-script: nosetests --nocapture
+script: nosetests --nocapture --nologcapture

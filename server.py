@@ -11,5 +11,9 @@ class EchoFactory(protocol.Factory):
     def buildProtocol(self, addr):
         return Echo()
 
-reactor.listenTCP(service['port'], EchoFactory())
-reactor.run()
+def run():
+    reactor.listenTCP(service['port'], EchoFactory())
+    reactor.run()
+
+if __name__ == '__main__':
+    run()
